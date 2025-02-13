@@ -1,0 +1,234 @@
+@startuml
+hide methods
+skinparam classAttributeIconSize 0
+
+
+
+class User{
+    -idLoc
+    -latitude
+    -long
+    }
+
+class Client {
+    -idClientProducer
+    -numeroIncidente
+    -nivel
+    -nif
+    -nome
+    -telefone
+    -plafond
+    -email
+    -numEncomendasAnual
+    -valorEncomendasAnual
+    -dataIncidente
+}
+
+class CadernoDeCampo{
+-data
+}
+class RegaPorParcela{
+-periocidade
+-tempoRega
+}
+
+class ParcelaAgricola{
+-designacao
+-área
+}
+
+class Cultura{
+-tipoCultura
+-precoCultura
+-cultura
+}
+
+class Colheita{
+-quantidadeColheita
+-dataColheita
+}
+
+class Produto{
+-nomeProduto
+-precoProduto
+-quantidadeProduto
+}
+
+class Encomenda{
+-dataVencimento
+-valorTotal
+-dataPagamento
+-dataVencimento
+-estado
+-registoEncomenda
+}
+
+class Morada{
+-dataEntrega
+-numero
+-codigoPostal
+-rua
+}
+
+class Incidente{
+-valor
+-dataCorrecao
+-dataOcorrencia
+}
+
+class TipoAplicacao{
+-tipoAplicacao
+-designacao
+}
+
+class Entrega{
+-estadoEntrega
+-data
+}
+class Company {
+    -idClientProducer
+}
+class Producer {
+    -idClientProducer
+}
+class FichaTecnica{
+-tipoFator
+-fornecedor
+}
+
+class Elemento{
+-substancia
+-unidade
+}
+
+class Categoria{
+-categoria
+}
+class WateringSystem{
+    -hour
+    -sec
+
+}
+
+class Farm{
+}
+
+class FatorProducao{
+-nomeComercial
+-formulacao
+-custo
+}
+
+class Sensor{
+-valorReferencia
+}
+
+class PlanoRega{
+-dataRealizacao
+-dataInicioPlano
+-dataFimPlano
+-quantidadeAgua
+-distribuicao
+-tipoRega
+}
+
+'==========================='
+
+class Hub {
+-latitude
+-longitude
+-codigo_hub
+}
+
+class TipoSensor {
+-tipoSensor
+}
+
+class Leitura {
+-valor
+-instanteLeitura
+}
+
+class Parcela {
+-area
+-designacao
+-zonaGeografica
+}
+
+class RestricaoFatorProducao {
+-data_inicio
+-data_fim
+-zona_geografica
+}
+
+class OperacaoAgricola {
+-dataPlaneada
+-data_execucao
+-estado
+}
+
+class TipoOperacaoAgricola {
+-tipoOperacao
+-designacao
+}
+
+class Auditoria {
+-userName
+-data
+-comando
+}
+
+'================================================
+
+
+User <|-U- Client
+User <|-u- Producer
+User <|-U- Company
+
+Load "1"--"*" User : provided by <
+
+Load "1"--"1" Farm : makes use <
+
+DistributionManager "1"--"1" Farm : has <
+
+WateringSystem "1"--"1" Farm : has <
+Categoria "1"--"*" Elemento
+Elemento "*"--"*" FichaTecnica
+FichaTecnica "1" -- "1" FatorProducao
+FatorProducao "*" -- "1" TipoAplicacao
+ParcelaAgricola "*" -- "*" FatorProducao
+RegaPorParcela "*" -- "1" CadernoDeCampo
+CadernoDeCampo "1" -- "*" Colheita
+CadernoDeCampo "1" -- "*" PlanoRega
+CadernoDeCampo "1" -- "*" Parcela
+RegaPorParcela "1" -- "1" ParcelaAgricola
+ParcelaAgricola "*" -- "*" Cultura
+Colheita "*" -- "*" Cultura
+Colheita "1" -- "*" Produto
+Produto "*" -- "*" Encomenda
+Encomenda "*" -- "0..1" Incidente
+Encomenda "1" -- "1" Entrega
+Morada "1" -- "1" Entrega
+Morada "2" -- "1" Client
+Farm "1" -- "*" Armazem
+Armazem "1" -- "*" Colheita
+Company "1" -- "1" Hub
+Client "1" -- "1" Hub
+Sensor "*" -- "1" PlanoRega
+Parcela "*"--"*" FatorProducao
+Parcela  "1"--"1" ParcelaAgricola
+Sensor "*" -- "1" TipoSensor
+Sensor "*" -- "*" Leitura
+FatorProducao "1"--"*" RestricaoFatorProducao
+FatorProducao "1"--"*" OperacaoAgricola
+OperacaoAgricola "1"--"1" TipoAplicacao
+OperacaoAgricola "1"--"*" Auditoria
+TipoOperacaoAgricola "*"--"1" OperacaoAgricola
+Sensor <|--- SensorPluviosidade
+Sensor <|--- SensorTemperaturaSolo
+Sensor <|--- SensorHumidadeSolo
+Sensor <|--- SensorVelocidadeVento
+Sensor <|--- SensorTemperaturaHumidadePressao
+Sensor <|--- SensorDireçãoDoVento
+
+@enduml

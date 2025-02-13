@@ -1,0 +1,10 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+User <|--  Company
+User <|-- Client
+User <|-- Producer
+
+
+@enduml

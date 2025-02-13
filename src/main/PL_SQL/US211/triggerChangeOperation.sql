@@ -1,0 +1,22 @@
+SET SERVEROUTPUT ON
+CREATE OR REPLACE TRIGGER mudar_Operacoes
+BEFORE UPDATE OR DELETE ON OperacaoAgricola
+FOR EACH ROW
+DECLARE
+    OPERACAO_ANTIGA EXCEPTION;
+    DATA_INVALIDA EXCEPTION;
+BEGIN
+    IF (:old.data_planeada < SYSDATE) THEN
+        RAISE OPERACAO_ANTIGA;
+    END IF;
+
+    IF (:new.data_planeada < SYSDATE) THEN
+        RAISE DATA_INVALIDA;
+    END IF;
+
+    EXCEPTION
+        WHEN OPERACAO_ANTIGA THEN
+            DBMS_OUTPUT.PUT_LINE('A operação já foi executada');
+        WHEN DATA_INVALIDA THEN
+            DBMS_OUTPUT.PUT_LINE('A data é anterior ao dia atual');
+END;

@@ -1,0 +1,1 @@
+valuesTemperatura(File f,File fm)

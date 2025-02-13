@@ -1,0 +1,49 @@
+@startuml
+title "Modelo Star"
+
+hide methods
+
+class Producao <<(F,#FFFF00)>>{
+   *IdProducao
+    Quantidade
+    IdTempo
+    IdSetor
+    IdProduto
+
+}
+class Venda <<(F,#FFFF00)>>{
+    *IdVenda
+    Quantidade
+    IdCliente
+    IdTempo
+    IdProduto
+}
+class Tempo <<(D,#FFFF00)>>{
+    *IdTempo
+    ano
+    mes
+}
+class Cliente<<(D,#FFFF00)>>{
+    *IdCLiente
+    nif
+}
+class Produto<<(D,#FFFF00)>>{
+    *IdProduto
+    tipoProduto
+    nomeProduto
+}
+class Setor<<(D,#FFFF00)>>{
+    *IdSetor
+    nome
+    Cultura
+}
+
+
+Producao "N" -- Tempo
+Venda "N" -up- "1" Tempo
+Venda "N" -up- "1" Produto
+Producao "N" -- "1" Produto
+Venda "N" -up- "1" Cliente
+Producao "N" -- "1" Setor
+
+@enduml

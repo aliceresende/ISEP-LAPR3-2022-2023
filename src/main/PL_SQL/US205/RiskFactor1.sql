@@ -1,0 +1,36 @@
+
+CREATE OR REPLACE FUNCTION US205ClientRiskFactor(clienteId IN CLIENTE.CODIGO_INTERNO%TYPE) RETURN NUMERIC AS
+    resultado     NUMERIC;
+    factordeRisco numeric;
+    encomendaId   ENCOMENDA.NUM_ENCOMENDA%type;
+    num_inci NUMERIC;
+BEGIN
+ SELECT SUM(P.PREÇO_PRODUTO * PE.QTD_VENDA) into resultado FROM
+        ENCOMENDA E, PRODUTO P, PRODUTO_ENCOMENDA PE, CLIENTE C WHERE
+        E. NUM_ENCOMENDA = PE.ENCOMENDANUM_ENCOMENDA AND
+        P.ID_PRODUTO=PE.PRODUTOID_PRODUTO AND
+        C.CODIGO_INTERNO=E.ID_CLIENTE AND
+        E.ESTADO='entregue' AND
+        C.CODIGO_INTERNO=clienteId AND
+        E.REGISTO_ENCOMENDA>=C.DATA_INCIDENTE;
+
+    DBMS_OUTPUT.PUT_LINE('Resultado ' ||resultado);
+
+    SELECT count(*) into num_inci FROM INCIDENTE I, ENCOMENDA E, CLIENTE C
+    WHERE I.NUM_ENCOMENDA=E.NUM_ENCOMENDA AND
+    E.ID_CLIENTE=C.CODIGO_INTERNO AND
+    C.CODIGO_INTERNO=E.ID_CLIENTE AND
+    E.NUM_ENCOMENDA=I.NUM_ENCOMENDA AND
+    C.CODIGO_INTERNO=clienteId AND
+    I.DATA_OCORRENCIA > SYSDATE - 365;
+
+    factordeRisco := resultado / num_inci;
+
+    DBMS_OUTPUT.PUT_LINE('Risk factor of client is ' ||factordeRisco);
+    return factordeRisco;
+
+EXCEPTION
+    WHEN ZERO_DIVIDE THEN
+        DBMS_OUTPUT.PUT_LINE('Client does not had incidents in the past 12 months ');
+         RETURN NULL;
+end;

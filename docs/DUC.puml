@@ -1,0 +1,50 @@
+@startuml
+usecase UC1 as "Gerar valores aleatórios"
+usecase UC2 as "Gerar os valores para todos os sensores"
+usecase UC3 as "Construir uma matriz diária de resumo para os sensores"
+usecase UC4 as "Definir os limites dos sensores"
+usecase UC6 as "Desenvolver o modelo de dados"
+usecase UC7 as "Carregar os respetivos dados para a base de dados"
+usecase UC8 as "Gerir os clientes"
+usecase UC9 as "Configurar os setores agrícolas"
+usecase UC10 as "Consultar os setores da exploração"
+usecase UC11 as "Classificar os fatores de produção"
+usecase UC12 as "Gerir os pedidos dos clientes"
+usecase UC13 as "Gerir calendário e registo de operações agrícolas"
+usecase UC14 as "Vender os produtos"
+usecase UC15 as "Colocar as encomendas à rede"
+usecase UC16 as "Definir os hubs da rede de distribuição"
+usecase UC17 as "Consultar os pontos de entrega dos cabazes"
+
+actor "Gestor Projeto" as PM
+actor "Gestor Agrícola" as FM
+actor "Cliente" as CL
+actor "Condutor" as DRIVER
+actor "Gestor de distribuição" as DM
+
+
+
+left to right direction
+PM -->(UC1)
+PM-->(UC2)
+PM-->(UC3)
+PM-->(UC4)
+PM-->(UC6)
+PM-->(UC7)
+
+
+FM-->(UC8)
+FM-->(UC9)
+FM-->(UC10)
+FM-->(UC11)
+FM-->(UC12)
+FM-->(UC13)
+FM-->(UC14)
+
+CL -->(UC15)
+
+DM-->(UC16)
+
+DRIVER-->(UC17)
+
+@enduml

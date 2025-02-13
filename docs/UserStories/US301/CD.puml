@@ -1,0 +1,121 @@
+@startuml
+'https://plantuml.com/class-diagram
+package java <<Folder>>{
+package algorithm <<Folder>> {
+
+class LoadNetDistribution{
++loadDistance(filepath)
++loadUser(filepath)
+}
+
+
+
+}
+
+package controller <<Folder>> {
+class DistributionManagerController{
++printDistributionNetworkGraph(): void
+
+}
+
+}
+
+package ui <<Folder>> {
+class DistributionManagerUI{
++DistributionManagerUI()
++run(): void
+}
+
+
+}
+package domain_model <<Folder>> {
+
+class User{
+-idLoc: final String
+-latitude: final double
+-longitude: final double
+
++getIdLoc(): String
++getLatitude(): double
++getLongitude(): double
+
+}
+class Company{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+class Client{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+
+class Producer{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+
+}
+
+}
+
+package graph <<Folder>> {
+package map <<Folder>> {
+class MapGraph{
++ addVertex ( vert : V) : boolean
++ addEdge (vOrig : V, vDest : V, weight : W): boolean
++ toString() : String
+
+}
+class DistributionNet{
+ -distribution: final Graph<User, Long>
+ +addDistance(v1 : String, v2 : String, distance : long) : void
+ +addUser(soc : User) : void
+ +getDistribution : Graph<User, Long>
+ +getVertexByUser (idUser: String) : User
+
+}
+}
+
+
+Interface Graph{
++isDirected()
++vertices()
++vertex(int key)
+}
+
+
+
+class CommonGraph{
++vertices()
++isDirected()
++numVertices()
+}
+}
+
+
+
+DistributionManagerUI ..> DistributionManagerController
+
+DistributionManagerController ..> DistributionNet
+
+LoadNetDistribution -->  User:  needs
+LoadNetDistribution ..> DistributionNet
+
+User <|--  Company
+User <|-- Client
+User <|-- Producer
+
+DistributionNet ..> MapGraph: uses
+
+MapGraph --> Graph : implements
+MapGraph --|> CommonGraph : extends
+
+
+
+@enduml

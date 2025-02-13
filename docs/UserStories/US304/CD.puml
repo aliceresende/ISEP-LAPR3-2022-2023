@@ -1,0 +1,141 @@
+@startuml
+'https://plantuml.com/class-diagram
+package java <<Folder>>{
+package algorithms <<Folder>> {
+
+class Load{
++loadDistance(filepath)
++loadUser(filepath)
+}
+
+
+
+class GraphAlgorithms{
++ shortestPath (g : Graph<V, E>,vOrig V, vDest : V , ce : Comparator<E>, sum : BinaryOperator<E>, zero : E, shortPath : LinkedList<V> ): <V, E> E
++ allCompanyHubs(N : int , allUsersGraph : Graph<User,Long> ) : TreeMap<Float, User>
++ nearestHub ( companyHubs : TreeMap<Float, User>, allUsersGraph : Graph<User,Long> ) : HashMap<User,User>
+
+}
+
+}
+
+package controller <<Folder>> {
+class DistributionManagerController{
+
++clientHubDistance(): void
+}
+
+}
+
+package ui <<Folder>> {
+class DistributionManagerUI{
++DistributionManagerUI()
++run(): void
+}
+
+
+}
+package domain_model <<Folder>> {
+
+class User{
+-idLoc: final String
+-latitude: final double
+-longitude: final double
+
++getIdLoc(): String
++getLatitude(): double
++getLongitude(): double
+
+}
+class Company{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+class Client{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+
+class Producer{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+
+}
+
+}
+
+package graph <<Folder>> {
+package map <<Folder>> {
+class MapGraph{
+- mapVertices : Map<V, MapVertex<V, E>>
++ adjVertices(vert : V) : Collection<V>
++ edge(vOrig : V,vDest :  V) : Edge<V, E>
++ edge(vOrigKey : int,vDestKey : int) : Edge<V, E>
++ addVertex ( vert : V) : boolean
++ addEdge (vOrig : V, vDest : V, weight : W): boolean
++ toString() : String
+
+}
+class DistributionNet{
+ -distribution: final Graph<User, Long>
+
+ +addDistance(v1 : String, v2 : String, distance : long) : void
+ +addUser(soc : User) : void
+ +getDistribution : Graph<User, Long>
+ +getVertexByUser (idUser: String) : User
+
+}
+}
+
+class Edge{
++Edge(V vOrig, V vDest, E weight)
++getWeight()
+}
+
+Interface Graph{
++isDirected()
++numVertices()
++vertices()
++key(V vert)
++vertex(int key)
+}
+
+
+
+class CommonGraph{
++vertices()
++isDirected()
++numVertices()
+}
+}
+
+
+DistributionManagerUI ..> DistributionManagerController
+
+DistributionManagerController ..> GraphAlgorithms
+DistributionManagerController ..> DistributionNet
+
+Load -->  User:  needs
+Load ..> DistributionNet
+GraphAlgorithms ..> EdgeComparator
+EdgeComparator <.. Edge
+
+User <|--  Company
+User <|-- Client
+User <|-- Producer
+
+DistributionNet ..> MapGraph: uses
+
+MapGraph --> Graph : implements
+MapGraph --|> CommonGraph : extends
+MapGraph ..|> Edge : uses
+
+
+@enduml

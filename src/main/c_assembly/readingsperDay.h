@@ -1,0 +1,1 @@
+long readingsperDay(float freqTemperatura);

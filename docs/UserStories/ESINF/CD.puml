@@ -1,0 +1,285 @@
+@startuml
+'https://plantuml.com/class-diagram
+package java <<Folder>>{
+
+
+package controller <<Folder>> {
+class DistributionManagerController{
++printDistributionNetworkGraph(): void
++graphConnection():void
++getMinimumConnectionBetweenPC():void
++getMST(): void
++checkWateringSystem(): void
++checkAllCompanyHubs(int N): void
++clientHubDistance(): void
++loadBaskets(): void
++generateExpeditionListWithNoRestrictions(int day): List<Basket>
++minimumPath(int day): void
++generateExpeditionListWithRestrictions(int day, int n): void
++expeditionCalculations(): void
+}
+
+}
+
+package ui <<Folder>> {
+class DistributionManagerUI{
++DistributionManagerUI()
++run(): void
+}
+
+
+}
+package domain_model <<Folder>> {
+
+class User{
+-idLoc: final String
+-latitude: final double
+-longitude: final double
+
++getIdLoc(): String
++getLatitude(): double
++getLongitude(): double
+
+}
+class Company{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+class Client{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+
+class Producer{
+ -idClientProducer: final String
+
+ +getIdClientProducer(): String
+ +toString(): String
+}
+
+class Basket{
+-idClient: String
+-requested: HashMap<Product,Trade>
++getIdClient(): String
++getRequested(): HashMap<Product, Trade>
+}
+
+class Trade{
+-idProducer: String
+-product: Product
++getIdProducer(): String
++getProduct(): Product
+}
+
+class Product{
+-id_number: final int
+-quantity: double
+-product_number: String
++getId_number(): int
++getQuantity(): double
++getProduct_number(): String
++setQuantity(double quantity)
++compareTo(Product p): int
+}
+
+}
+
+package service <<Folder>> {
+package load <<Folder>> {
+
+class LoadBaskets {
++fillStockAndOrders (String filePath): void
++getStock(): HashMap<String, HashMap<Integer, ArrayList<Product>>>
++getOrders(): HashMap<String, HashMap<Integer, ArrayList<Product>>>
+}
+
+class LoadNetDistribution {
++loadDistance(String filepath): void
++loadUser(String filepath): void
+}
+
+
+}
+
+class DistributionNetAlgorithms {
++isConnected(Graph<User, Long> graphDistribution): boolean
++getMinConnections(Graph<User, Long> graphDist): int
++reconstructPath(int source, int dest, int[] prev): List<Integer>
++shortestPath(int source, int dest, Graph<User, Long> graphDist): List<Integer>
++solve(int source, Graph<User, Long> graphDist): int[]
++getAdjVerticesIndex(int node, Graph<User, Long> graphDist): List<Integer>
++kruskall_mst(Graph<User, Long> graph): Graph<User, Long>
++allCompanyHubs(int N, Graph<User, Long> allUsersGraph): TreeMap<Float, User>
++nearestHub(TreeMap<Float, User> companyHubs, Graph<User, Long> allUsersGraph): HashMap<User, User>
++getHubs(MatrixGraph<User, Long> shortPath, int n): TreeMap<Float, User>
+}
+
+class ExpeditionAlgorithms {
+-stock: HashMap<String, HashMap<Integer, ArrayList<Product>>>
+-orders: HashMap<String, HashMap<Integer, ArrayList<Product>>>
++expeditionListWithNoRestrictions(int day): ArrayList<Basket>
++tradeGetter(int day, HashMap<String, HashMap<Integer, ArrayList<Product>>> stock, Product requested): Trade
++getNNearestProducers(User client, int n, HashMap<User, User> clientHub, ArrayList<User> allProducers): TreeMap<Long, User>
++getClientsHub(HashMap<User, User> clientHub, User client): User
+-getProducersOfExpeditionList(ArrayList<Basket> expeditionList): List<User>
+-getClientHubsOfExpeditionList(ArrayList<Basket> expeditionList, HashMap<User, User> clientHub): List<User>
++getBasketsByHub(ArrayList<Basket> expeditionList, HashMap<User, User> clientHub): void
++minDistributionRoute(Graph<User, Long> graph, ArrayList<Basket> expeditionList, HashMap<User, User> clientHub): LinkedHashSet<User>
+-printDistancesBetweenWaypoints(Graph<User, Long> graph, LinkedList<User> finalList): void
+-printTotalDistance(Graph<User, Long> graph, LinkedList<User> finalList): void
++findHubCompany(String id, HashMap<User, User> hubClient): User
++findHubClient(String id, HashMap<User, User> hubClient): User
++getClientHub(HashMap<String, ArrayList<String>> clientGivenProducers, HashMap<User, Set<String>>clientPerHub,\n HashMap<User, Set<String>>producerPerHub, HashMap<User, User> hubClient): void
++getOrdersDays(): ArrayList<Integer>
++setupStatistics(ArrayList<Integer>days, TreeMap<Float, User> hubs, HashMap<User, User>clientHubs): void
++expStatitics(TreeMap<Float, User> hubs, HashMap<User, User>clientHubs, ArrayList<Integer> days, HashMap<User, Set<String>>clientPerHub,\n HashMap<User, Set<String>>producerPerHub, \nHashMap<String, ArrayList<String>> clientebaskets, HashMap<String, HashMap<String, Integer>> numberofGivenBaskets, HashMap<String, ArrayList<String>> distinctProd): void
++expCalculations(ArrayList<Basket> baskets, HashMap<String, ArrayList<String>>clientebaskets, HashMap<String,\n HashMap<String, Integer>> numberofGivenBaskets, HashMap<String, ArrayList<String>> distinctProd): void
++expeditionListWithRestrictions( int day, int n, HashMap<User, User > clientHub, ArrayList < User > allProducersList): ArrayList<Basket>
+}
+
+}
+
+package graph <<Folder>> {
+
+package matrix <<Folder>> {
+
+class MatrixGraph {
+-INITIAL_CAPACITY: static final int
+-RESIZE_FACTOR: static final float
+-edgeMatrix: Edge<V,E>[][]
++adjVertices(V vert): Collection<V>
++edges(): Collection<Edge<V, E>>
++edge(V vOrig, V vDest): Edge<V, E>
++edge(int vOrigKey, int vDestKey): Edge<V, E>
++outDegree(V vert): int
++inDegree(V vert): int
++outgoingEdges(V vert): Collection<Edge<V, E>>
++incomingEdges(V vert): Collection<Edge<V, E>>
++addVertex(V vert): boolean
++resizeMatrix(): void
++addEdge(V vOrig, V vDest, E weight): boolean
++removeVertex(V vert): boolean
++removeEdge(int vOrigKey, int vDestKey): void
++removeEdge(V vOrig, V vDest): boolean
++clone(): MatrixGraph<V, E>
+}
+
+}
+
+package algorithm <<Folder>> {
+
+
+class GraphAlgorithms{
++ BreadthFirstSearch (g : Graph<V, E> g, vert: V) : <V, E> LinkedList<V>
++ DepthFirstSearch (g : Graph<V, E>, vert : V) : <V, E> LinkedList<V>
++ allPaths (g : Graph<V, E>, vOrig : V , vDest : V , visited : boolean[] ,path : LinkedList<V> , paths : ArrayList<LinkedList<V>>): void
++ allPaths (g : Graph<V, E>, vOrig : V , vDest : V ) : <V, E> ArrayList<LinkedList<V>>
++ shortestPathDijkstra (g : Graph<V, E>, vOrig V , ce : Comparator<E>, sum : BinaryOperator<E>, zero : E, visited : boolean[], pathKeys : V[], dist : E[]) : void
++ initializePathDist (nVerts : int, pathKeys : V[], dist : E[]): void
++ shortestPath (g : Graph<V, E>,vOrig V, vDest : V , ce : Comparator<E>, sum : BinaryOperator<E>, zero : E, shortPath : LinkedList<V> ): <V, E> E
++ shortestPaths (g : Graph<V, E>, vOrig V , ce : Comparator<E>, sum : BinaryOperator<E>, zero : E, paths :ArrayList<LinkedList<V>>, dists : ArrayList<E>) : boolean
++ getPath (g : Graph<V, E>,vOrig V, vDest : V , pathKeys : V[], path: LinkedList<V>): void
++ minDistGraph (g : Graph<V, E>, ce : Comparator<E>, sum : BinaryOperator<E>):  <V, E> MatrixGraph<V, E>
++ kruskal_mst (grafo : Graph<User, Long>) : Graph<User, Long>
+}
+
+}
+
+package map <<Folder>> {
+class MapGraph{
+- mapVertices : Map<V, MapVertex<V, E>>
++ adjVertices(vert : V) : Collection<V>
++ edge(vOrig : V,vDest :  V) : Edge<V, E>
++ edge(vOrigKey : int,vDestKey : int) : Edge<V, E>
++ addVertex ( vert : V) : boolean
++ addEdge (vOrig : V, vDest : V, weight : W): boolean
++ toString() : String
+
+}
+class DistributionNet{
+ -distribution: final Graph<User, Long>
+
+ +addDistance(v1 : String, v2 : String, distance : long) : void
+ +addUser(soc : User) : void
+ +getDistribution : Graph<User, Long>
+ +getVertexByUser (idUser: String) : User
+
+}
+
+class MapVertex {
+-element: final private V
+-outVertsfinal: private Map<V, Edge<V, E>>
++getElement(): V
++addAdjVert(V vAdj, Edge<V, E> edge): void
++remAdjVert(V vAdj): void
++getEdge(V vAdj): Edge<V, E>
++numAdjVerts(): int
++getAllAdjVerts(): Collection<V>
++getAllOutEdges(): Collection<Edge<V, E>>
+}
+class Edge{
++Edge(V vOrig, V vDest, E weight)
++getWeight()
+}
+
+Interface Graph{
++isDirected()
++numVertices()
++vertices()
++key(V vert)
++vertex(int key)
+}
+
+
+
+class CommonGraph{
++vertices()
++isDirected()
++numVertices()
+}
+
+}
+}
+
+}
+
+
+
+DistributionManagerUI ..> DistributionManagerController
+
+DistributionManagerController ..> GraphAlgorithms
+DistributionManagerController .r.> DistributionNet
+DistributionManagerController ..> ExpeditionAlgorithms
+DistributionManagerController ..> DistributionNetAlgorithms
+
+DistributionNetAlgorithms ..> LoadNetDistribution
+ExpeditionAlgorithms ..> LoadBaskets
+LoadBaskets ..> Trade
+LoadBaskets ..> Product
+LoadBaskets ..> Basket
+LoadNetDistribution ..>  User:  needs
+LoadNetDistribution ..> DistributionNet
+
+User <|--  Company
+User <|-- Client
+User <|-- Producer
+
+DistributionNet ..> MapGraph: uses
+
+MapGraph --> Graph : implements
+MapGraph --|> CommonGraph : extends
+MapGraph ..|> Edge : uses
+MapGraph ..> MapVertex
+MapGraph ..> MatrixGraph
+
+
+User -u-> Basket : > asked for
+Basket -u-> Trade : > asked for
+Trade -u-> Product : > asked for
+
+
+@enduml
